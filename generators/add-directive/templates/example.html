@@ -2,23 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Component Example</title>
+    <title>Directive Example</title>
 </head>
 <body>
 
   <!--演示区域-->
-  <<%= componentName %>></<%= componentName %>>
+  <div v-<%= directiveName %>="{msg: 'Hello Daniel'}"></div>
 
   <script type="text/javascript" src="../../../node_modules/vue/dist/vue.js"></script>
   <script type="text/javascript" src="../../../node_modules/vue-resource/dist/vue-resource.js"></script>
-  <script type="text/javascript" src="../../../dist/<%= componentName %>.js"></script>
+  <script type="text/javascript" src="../../../dist/<%= directiveName %>.js"></script>
   <script type="text/javascript">
     // Bootstrap the app
     new Vue({
-      el: 'body',
-      components: {
-        <%= camelComponentName %>: <%= camelComponentName %>
-      }
+      el: 'body'
     });
   </script>
 </body>

@@ -33,7 +33,7 @@ module.exports = yeoman.Base.extend({
 
       scrFolder = 'src/components/' + this.props.componentName;
       scrFolderPath = './' + scrFolder + '/';
-      exampleFolder = 'example/components/' + this.props.componentName;
+      exampleFolder = 'examples/components/' + this.props.componentName;
       exampleFolderPath = './' + exampleFolder + '/';
     });
 
@@ -55,7 +55,7 @@ module.exports = yeoman.Base.extend({
             this.props
           );
         } else {
-          toFileName = toFileName.replace('_', his.props.componentName);
+          toFileName = toFileName.replace('_', this.props.componentName);
           this.fs.copyTpl(
             filePath,
             path.resolve(scrFolderPath, toFileName),
@@ -74,40 +74,40 @@ module.exports = yeoman.Base.extend({
 
     var fullPath = 'src/components/index.js';
     utils.rewriteFile({
-      fileRelativePath      : fullPath,
+      fileRelativePath: fullPath,
       insertPrev: true,
-      needle    : "// Don't touch me - import",
-      splicable : [
+      needle: "// Don't touch me - import",
+      splicable: [
         `import ${this.props.camelComponentName} from './${this.props.componentName}/index.vue';`
       ]
     });
     utils.rewriteFile({
-      fileRelativePath      : fullPath,
+      fileRelativePath: fullPath,
       insertPrev: true,
-      needle    : "// Don't touch me",
-      splicable : [
+      needle: "// Don't touch me - export",
+      splicable: [
         `${this.props.camelComponentName},`
       ]
     });
 
     fullPath = 'examples/index.html';
     utils.rewriteFile({
-      fileRelativePath      : fullPath,
+      fileRelativePath: fullPath,
       insertPrev: true,
-      needle    : "<!-- Don't touch me - compopnents -->",
-      splicable : [
-        `   <li>`
-        `     <a href="examples/components/${this.props.componentName}/index.html">${this.props.firstCapCamelComponentName} Example</a>`
-        `   </li>`
+      needle: "<!-- Don't touch me - compopnents -->",
+      splicable: [
+        `<li>`,
+        `  <a href="examples/components/${this.props.componentName}/index.html">${this.props.firstCapCamelComponentName} Example</a>`,
+        `</li>`
       ]
     });
 
     fullPath = 'conf/webpack.config.dev.js';
     utils.rewriteFile({
-      fileRelativePath      : fullPath,
+      fileRelativePath: fullPath,
       insertPrev: true,
-      needle    : "// Don't touch me - components",
-      splicable : [
+      needle: "// Don't touch me - components",
+      splicable: [
         `'${this.props.componentName}': path.join(config.src, 'components', '${this.props.componentName}', 'index.vue'),`
       ]
     });

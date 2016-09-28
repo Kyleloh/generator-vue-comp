@@ -9,65 +9,99 @@ var yeoman = require('yeoman-generator');
 var logger = require('../app/logger');
 var utils = require('../app/utils');
 
-var scrFolderPath, scrFolder;
+var scrFolderPath, scrFolder, exampleFolderPath, exampleFolder;
 
 module.exports = yeoman.Base.extend({
 
   prompting() {
 
-    // var prompts = [{
-    //   type: 'string',
-    //   name: 'name',
-    //   message: 'Would you like to enable this option?',
-    //   default: 'name'
-    // }];
+    var prompts = [{
+      type: 'string',
+      name: 'name',
+      message: 'What is your directive name?',
+      default: 'name'
+    }];
 
-    // return this.prompt(prompts).then(props => {
-    //   // To access props later use this.props.someAnswer;
-    //   this.props = props;
+    return this.prompt(prompts).then(props => {
+      // To access props later use this.props.someAnswer;
+      this.props = props;
 
-    //   // example: name = demo-user
-    //   this.props.componentName = s(this.props.name).underscored().slugify().value(); // => demo-user
-    //   this.props.camelComponentName = s(this.props.componentName).camelize().value(); // => demoUser
-    //   this.props.firstCapCamelComponentName = s(this.props.camelComponentName).capitalize().value(); // => DemoUser
+      // example: name = demo-user
+      this.props.directiveName = s(this.props.name).underscored().slugify().value(); // => demo-user
+      this.props.camelDirectiveName = s(this.props.directiveName).camelize().value(); // => demoUser
+      this.props.firstCapCamelDirectiveName = s(this.props.camelDirectiveName).capitalize().value(); // => DemoUser
 
-    //   scrFolder = 'src/components/' + this.props.componentName;
-    //   scrFolderPath = './' + scrFolder + '/';
-
-    // });
+      scrFolder = 'src/directives/' + this.props.directiveName;
+      scrFolderPath = './' + scrFolder + '/';
+      exampleFolder = 'examples/directives/' + this.props.directiveName;
+      exampleFolderPath = './' + exampleFolder + '/';
+    });
 
   },
 
   copyTemplates() {
 
-    // var done = this.async();
+    var done = this.async();
 
-    // glob(this.templatePath() + "/**/*.*", {}, (er, files) => {
-    //   _.each(files, filePath => {
-    //     var toFileName = path.parse(filePath).base;
-    //     this.fs.copyTpl(
-    //       filePath,
-    //       path.resolve(scrFolderPath, toFileName),
-    //       this.props
-    //     );
-    //   });
+    glob(this.templatePath() + "/**/*.*", {}, (er, files) => {
+      _.each(files, filePath => {
+        var toFileName = path.parse(filePath).base;
 
-    //   done();
-    // });
+        if (toFileName === 'example.html') {
+          toFileName = toFileName.replace('example', 'index');
+          this.fs.copyTpl(
+            filePath,
+            path.resolve(exampleFolderPath, toFileName),
+            this.props
+          );
+        } else {
+          this.fs.copyTpl(
+            filePath,
+            path.resolve(scrFolderPath, toFileName),
+            this.props
+          );
+        }
+
+      });
+
+      done();
+    });
 
   },
 
   updateContent() {
 
-    // var fullPath = 'src/components/App.vue';
-    // utils.rewriteFile({
-    //   fileRelativePath      : fullPath,
-    //   insertPrev: true,
-    //   needle    : "<!-- Don't touch me -->",
-    //   splicable : [
-    //     `<${this.componentName}></${this.componentName}>`
-    //   ]
-    // });
+    var fullPath = 'src/directives/index.js';
+    utils.rewriteFile({
+      fileRelativePath: fullPath,
+      insertPrev: true,
+      needle: "// Don't touch me - import",
+      splicable: [
+        `import './${this.props.directiveName}/index';`
+      ]
+    });
+
+    fullPath = 'examples/index.html';
+    utils.rewriteFile({
+      fileRelativePath: fullPath,
+      insertPrev: true,
+      needle: "<!-- Don't touch me - directives -->",
+      splicable: [
+        `<li>`,
+        `  <a href="examples/directives/${this.props.directiveName}/index.html">${this.props.firstCapCamelDirectiveName} Example</a>`,
+        `</li>`
+      ]
+    });
+
+    fullPath = 'conf/webpack.config.dev.js';
+    utils.rewriteFile({
+      fileRelativePath: fullPath,
+      insertPrev: true,
+      needle: "// Don't touch me - directives",
+      splicable: [
+        `'${this.props.directiveName}': path.join(config.src, 'directives', '${this.props.directiveName}', 'index.js'),`
+      ]
+    });
 
   },
 
