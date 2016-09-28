@@ -75,11 +75,11 @@ module.exports = yeoman.Base.extend({
     }, {
       name   : 'appDescription',
       message: 'How would you describe your application?',
-      default: 'Activity project with Vue'
+      default: 'Component project with Vue'
     }, {
       name   : 'appKeywords',
       message: 'How would you describe your application in comma seperated key words?',
-      default: 'activity vue'
+      default: 'component,vue'
     }, {
       name   : 'appAuthor',
       message: 'What is your company/author name?'
@@ -93,6 +93,8 @@ module.exports = yeoman.Base.extend({
 
       this.slugifiedAppName = s(this.appName).underscored().slugify().value();
       this.humanizedAppName = s(this.appName).humanize().value();
+      this.camelAppName = s(this.slugifiedAppName).camelize().value(); 
+      this.firstCapCamelAppName = s(this.camelAppName).capitalize().value();
       this.capitalizedAppAuthor = s(this.appAuthor).capitalize().value();
     });
   },
@@ -109,6 +111,18 @@ module.exports = yeoman.Base.extend({
       keywords: this.appKeywords.split(',')
     });
     this.fs.writeJSON(this.destinationPath(folder + '/package.json'), pkg);
+  },
+
+  /**
+   * 更新文本内容
+   */
+  updateContent() {
+    var readme = this.fs.read(this.destinationPath(folder + '/README.md'));
+    readme = readme.replace(/vue component seed/g, this.slugifiedAppName.replace(/\-/g, ' '))
+                    .replace(/vue\-component\-seed/g, this.slugifiedAppName)
+                    .replace(/VueComponentSeed/g, this.firstCapCamelAppName);
+    console.log(readme);
+    this.fs.write(this.destinationPath(folder + '/README.md'), readme);
   },
 
   /**
@@ -129,7 +143,7 @@ module.exports = yeoman.Base.extend({
           logger.log('');
           logger.green('To Get Started, run the following command:');
           logger.log('');
-          logger.yellow('cd ' + folder + ' && npm run dev'); // TODO 根据实际情况进行修改
+          logger.yellow('cd ' + folder + ' && npm run dev');
           logger.log('');
           logger.green('Happy Hacking!');
           logger.green('------------------------------------------');
