@@ -1,4 +1,4 @@
-# generator-vue-comp [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+# generator-vue-comp
 > vue component project generator
 
 ## Installation
@@ -14,6 +14,18 @@ Then generate your new project:
 
 ```bash
 yo vue-comp
+```
+
+You can add a vue component:
+
+```bash
+yo vue-comp:add-comp
+```
+
+or add a vue directive:
+
+```
+yo vue-comp:add-directive
 ```
 
 ## Getting To Know Yeoman
