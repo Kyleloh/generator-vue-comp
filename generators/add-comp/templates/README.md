@@ -2,7 +2,7 @@
 
 描述一下组件吧
 
-![组件预览图](./preview.png)
+![组件预览图](preview.png)
 
 ## Usage
 
