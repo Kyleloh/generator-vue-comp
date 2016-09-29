@@ -108,7 +108,7 @@ module.exports = yeoman.Base.extend({
       insertPrev: true,
       needle: "// Don't touch me - components",
       splicable: [
-        `'${this.props.componentName}': path.join(config.src, 'components', '${this.props.componentName}', 'index.vue'),`
+        `'${this.props.camelComponentName}': path.join(config.src, 'components', '${this.props.componentName}', 'index.vue'),`
       ]
     });
 
