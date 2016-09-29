@@ -2,6 +2,8 @@
 
 描述一下指令吧
 
+![组件预览图](preview.gif)
+
 ## Usage
 
 请参考`examples/directives/<%= directiveName %>/index.html`
