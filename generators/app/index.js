@@ -53,7 +53,12 @@ module.exports = yeoman.Base.extend({
    */
   cloneRepo() {
     logger.green('Cloning the remote seed repo.......');
-    return utils.exec('git clone https://github.com/danielxiaowxx/vue-component-seed.git --branch master --single-branch ' + folder);
+    if (this.props.version === 'v2') {
+      return utils.exec('git clone https://github.com/danielxiaowxx/vue2-component-seed.git --branch master --single-branch ' + folder);
+    } else {
+      return utils.exec('git clone https://github.com/danielxiaowxx/vue-component-seed.git --branch master --single-branch ' + folder);
+    }
+
   },
 
   /**
@@ -83,6 +88,12 @@ module.exports = yeoman.Base.extend({
     }, {
       name   : 'appAuthor',
       message: 'What is your company/author name?'
+    }, {
+      type: 'list',
+      name: 'version',
+      message: 'What is your vue version?',
+      choices: [{name: 'v1', value: 'v1'}, {name: 'v2', value: 'v2'}],
+      default: 'v2'
     }];
 
     return this.prompt(prompts).then(props => {
@@ -93,7 +104,7 @@ module.exports = yeoman.Base.extend({
 
       this.slugifiedAppName = s(this.appName).underscored().slugify().value();
       this.humanizedAppName = s(this.appName).humanize().value();
-      this.camelAppName = s(this.slugifiedAppName).camelize().value(); 
+      this.camelAppName = s(this.slugifiedAppName).camelize().value();
       this.firstCapCamelAppName = s(this.camelAppName).capitalize().value();
       this.capitalizedAppAuthor = s(this.appAuthor).capitalize().value();
     });

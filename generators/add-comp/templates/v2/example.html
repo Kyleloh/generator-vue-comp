@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Component Example</title>
+</head>
+<body>
+
+  <!--演示区域-->
+  <div id="demo">
+    <<%= componentName %>></<%= componentName %>>
+  </div>
+
+  <script type="text/javascript" src="../../../node_modules/vue/dist/vue.js"></script>
+  <script type="text/javascript" src="../../../node_modules/vue-resource/dist/vue-resource.js"></script>
+  <script type="text/javascript" src="../../../dist/<%= camelComponentName %>.js"></script>
+  <script type="text/javascript">
+    // Bootstrap the app
+    new Vue({
+      el: '#demo',
+      components: {
+        <%= camelComponentName %>: <%= camelComponentName %>
+      }
+    });
+  </script>
+</body>
+</html>

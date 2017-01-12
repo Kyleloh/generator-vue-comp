@@ -20,6 +20,12 @@ module.exports = yeoman.Base.extend({
       name: 'name',
       message: 'What is your directive name?',
       default: 'name'
+    }, {
+      type: 'list',
+      name: 'version',
+      message: 'What is your vue version?',
+      choices: [{name: 'v1', value: 'v1'}, {name: 'v2', value: 'v2'}],
+      default: 'v2'
     }];
 
     return this.prompt(prompts).then(props => {
@@ -43,7 +49,7 @@ module.exports = yeoman.Base.extend({
 
     var done = this.async();
 
-    glob(this.templatePath() + "/**/*.*", {}, (er, files) => {
+    glob(this.templatePath() + '/' + this.props.version + "/**/*.*", {}, (er, files) => {
       _.each(files, filePath => {
         var toFileName = path.parse(filePath).base;
 

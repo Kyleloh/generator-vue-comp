@@ -4,7 +4,7 @@ import _assign from 'lodash-es/assign';
 
 Vue.directive('<%= directiveName %>', {
   bind() {
-    
+
   },
   update(options) {
     var defOptions = {
