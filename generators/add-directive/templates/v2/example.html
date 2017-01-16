@@ -7,7 +7,9 @@
 <body>
 
   <!--演示区域-->
-  <div v-<%= directiveName %>="{msg: 'Hello Daniel'}"></div>
+  <div id="demo">
+    <div v-<%= directiveName %>="{msg: 'Hello Daniel'}"></div>
+  </div>
 
   <script type="text/javascript" src="../../../node_modules/vue/dist/vue.js"></script>
   <script type="text/javascript" src="../../../node_modules/vue-resource/dist/vue-resource.js"></script>
@@ -15,7 +17,7 @@
   <script type="text/javascript">
     // Bootstrap the app
     new Vue({
-      el: 'body'
+      el: '#demo'
     });
   </script>
 </body>
