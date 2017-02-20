@@ -36,15 +36,25 @@ module.exports = yeoman.Base.extend({
    * 询问项目的所在目录名
    */
   promptForFolder() {
-    var prompt = {
-      name   : 'folder',
-      message: 'In which folder would you like the project to be generated? ',
-      default: 'generator-vue-comp'
-    };
+    var prompt = [
+      {
+        name: 'folder',
+        message: 'In which folder would you like the project to be generated? ',
+        default: 'generator-vue-comp'
+      },
+      {
+        type: 'list',
+        name: 'version',
+        message: 'What is your vue version?',
+        choices: [{name: 'v1', value: 'v1'}, {name: 'v2', value: 'v2'}],
+        default: 'v2'
+      }
+    ];
 
     return this.prompt(prompt).then(props => {
       folder = props.folder;
       folderPath = './' + folder + '/';
+      this.version = props.version;
     });
   },
 
@@ -53,7 +63,7 @@ module.exports = yeoman.Base.extend({
    */
   cloneRepo() {
     logger.green('Cloning the remote seed repo.......');
-    if (this.props.version === 'v2') {
+    if (this.version === 'v2') {
       return utils.exec('git clone https://github.com/danielxiaowxx/vue2-component-seed.git --branch master --single-branch ' + folder);
     } else {
       return utils.exec('git clone https://github.com/danielxiaowxx/vue-component-seed.git --branch master --single-branch ' + folder);
@@ -74,26 +84,20 @@ module.exports = yeoman.Base.extend({
   getPrompts() {
 
     var prompts = [{
-      name   : 'appName',
+      name: 'appName',
       message: 'What would you like to call your application?',
       default: folder
     }, {
-      name   : 'appDescription',
+      name: 'appDescription',
       message: 'How would you describe your application?',
       default: 'Component project with Vue'
     }, {
-      name   : 'appKeywords',
+      name: 'appKeywords',
       message: 'How would you describe your application in comma seperated key words?',
       default: 'component,vue'
     }, {
-      name   : 'appAuthor',
+      name: 'appAuthor',
       message: 'What is your company/author name?'
-    }, {
-      type: 'list',
-      name: 'version',
-      message: 'What is your vue version?',
-      choices: [{name: 'v1', value: 'v1'}, {name: 'v2', value: 'v2'}],
-      default: 'v2'
     }];
 
     return this.prompt(prompts).then(props => {
@@ -130,8 +134,8 @@ module.exports = yeoman.Base.extend({
   updateContent() {
     var readme = this.fs.read(this.destinationPath(folder + '/README.md'));
     readme = readme.replace(/vue component seed/g, this.slugifiedAppName.replace(/\-/g, ' '))
-                    .replace(/vue\-component\-seed/g, this.slugifiedAppName)
-                    .replace(/VueComponentSeed/g, this.firstCapCamelAppName);
+      .replace(/vue\-component\-seed/g, this.slugifiedAppName)
+      .replace(/VueComponentSeed/g, this.firstCapCamelAppName);
     console.log(readme);
     this.fs.write(this.destinationPath(folder + '/README.md'), readme);
   },
