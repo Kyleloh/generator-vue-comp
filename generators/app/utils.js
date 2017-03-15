@@ -115,8 +115,52 @@ function exec(cmd) {
   });
 };
 
+function deleteFile(path){
+    let files = [];
+    if( fs.existsSync(path) ) {
+        files = fs.readdirSync(path);
+        files.forEach(function(file,index){
+            let curPath = path + "/" + file;
+            if(fs.statSync(curPath).isDirectory()) { // recurse
+                deleteFolder(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+    logger.log('  deleted ' + path);
+}
+
+function deleteSome(path, keywords, isBolck) {
+  let haystack = fs.readFileSync(path, 'utf8');
+
+  let lines = haystack.split('\n');
+  keywords.forEach((keyword) => {
+    lines.some((line, i) => {
+      if (line.indexOf(keyword) !== -1) {
+        if(!!isBolck){
+          lines.splice(i-1,3);
+        }else{
+          lines.splice(i,1);
+        }
+        return true;
+      }
+    });
+  });
+  fs.writeFileSync(path, lines.join('\n'));
+  logger.log('  updated ' + path);
+}
+
+function readDir(path){
+  return fs.readdirSync(path);
+}
+
 module.exports = {
   rewrite: rewrite,
   rewriteFile: rewriteFile,
-  exec: exec
+  exec: exec,
+  deleteFile: deleteFile,
+  deleteSome: deleteSome,
+  readDir: readDir
 };
