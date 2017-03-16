@@ -65,8 +65,11 @@ module.exports = yeoman.Base.extend({
 
     return this.prompt(prompts).then(props => {
       let compName = props.deletename,
+        componentName = s(compName).underscored().slugify().value(), // => demo-user
+        camelComponentName = s(componentName).camelize().value(), // => demoUser
+        firstCapCamelComponentName = s(camelComponentName).capitalize().value(), // => DemoUser
         indexFilePath = `src/${deleteType}/index.js`,
-        deleteKeyWord = `${compName},`,
+        deleteKeyWord = `${camelComponentName},`,
         compPath = `src/${deleteType}/${compName}/`,
         examplePath = `examples/${deleteType}/${compName}/`,
         exampleIndexHtml = 'examples/index.html',
@@ -77,7 +80,7 @@ module.exports = yeoman.Base.extend({
 
       // component 和 directive 要删除的行的keyword不同
       if (deleteType === 'components') {
-        deleteKeyWord2 = `import ${compName} from`;
+        deleteKeyWord2 = `import ${camelComponentName} from`;
       } else {
         deleteKeyWord2 = `import './${compName}/index'`;
       }
