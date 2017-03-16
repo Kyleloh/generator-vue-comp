@@ -5,7 +5,7 @@ var glob = require("glob");
 var path = require('path');
 var s = require('underscore.string');
 var yeoman = require('yeoman-generator');
-var fs = require('fs');
+var fs = require('fs-extra')
 
 var logger = require('../app/logger');
 var utils = require('../app/utils');
@@ -87,10 +87,10 @@ module.exports = yeoman.Base.extend({
 
       logger.log('============ delete start =============')
 
-      utils.deleteFile(compPath);
+      fs.removeSync(compPath);
       logger.red(`deleted ${compPath}`);
 
-      utils.deleteFile(examplePath);
+      fs.removeSync(examplePath);
       logger.red(`deleted ${examplePath}`);
 
       utils.deleteSome(indexFilePath, [deleteKeyWord, deleteKeyWord2]);

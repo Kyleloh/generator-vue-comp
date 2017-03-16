@@ -1,6 +1,6 @@
 'use strict';
 
-var fs = require('fs');
+var fs = require('fs-extra')
 var path = require('path');
 var shell = require('shelljs');
 var child_process = require('child_process');
@@ -116,25 +116,6 @@ function exec(cmd) {
   });
 };
 
-function deleteFile(path){
-    glob.sync(path+'*').forEach(() => {
-
-    });
-    let files = [];
-    if( fs.existsSync(path) ) {
-        files = fs.readdirSync(path);
-        files.forEach(function(file,index){
-            let curPath = path + "/" + file;
-            if(fs.statSync(curPath).isDirectory()) { // recurse
-                deleteFolder(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
-    }
-}
-
 function deleteSome(path, keywords, isBlock) {
   let haystack = fs.readFileSync(path, 'utf8');
 
@@ -158,6 +139,5 @@ module.exports = {
   rewrite: rewrite,
   rewriteFile: rewriteFile,
   exec: exec,
-  deleteFile: deleteFile,
   deleteSome: deleteSome
 };
