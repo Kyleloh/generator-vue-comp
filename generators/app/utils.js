@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var shell = require('shelljs');
 var child_process = require('child_process');
+var glob = require("glob");
 
 var logger = require('./logger');
 
@@ -116,6 +117,9 @@ function exec(cmd) {
 };
 
 function deleteFile(path){
+    glob.sync(path+'*').forEach(() => {
+
+    });
     let files = [];
     if( fs.existsSync(path) ) {
         files = fs.readdirSync(path);
@@ -129,17 +133,16 @@ function deleteFile(path){
         });
         fs.rmdirSync(path);
     }
-    logger.log('  deleted ' + path);
 }
 
-function deleteSome(path, keywords, isBolck) {
+function deleteSome(path, keywords, isBlock) {
   let haystack = fs.readFileSync(path, 'utf8');
 
   let lines = haystack.split('\n');
   keywords.forEach((keyword) => {
     lines.some((line, i) => {
       if (line.indexOf(keyword) !== -1) {
-        if(!!isBolck){
+        if(!!isBlock){
           lines.splice(i-1,3);
         }else{
           lines.splice(i,1);
@@ -149,11 +152,6 @@ function deleteSome(path, keywords, isBolck) {
     });
   });
   fs.writeFileSync(path, lines.join('\n'));
-  logger.log('  updated ' + path);
-}
-
-function readDir(path){
-  return fs.readdirSync(path);
 }
 
 module.exports = {
@@ -161,6 +159,5 @@ module.exports = {
   rewriteFile: rewriteFile,
   exec: exec,
   deleteFile: deleteFile,
-  deleteSome: deleteSome,
-  readDir: readDir
+  deleteSome: deleteSome
 };
