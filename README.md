@@ -54,3 +54,4 @@ MIT © [Daniel.xiao](http://yeoman.io)
 [daviddm-url]: https://david-dm.org/daniel-dx/generator-vue-comp
 [coveralls-image]: https://coveralls.io/repos/daniel-dx/generator-vue-comp/badge.svg
 [coveralls-url]: https://coveralls.io/r/daniel-dx/generator-vue-comp
+
